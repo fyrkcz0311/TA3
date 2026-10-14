@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "author": "Ejemplo educativo Arduino IoT",
+  "editor": "wokwi",
+  "parts": [
+    {"type": "wokwi-arduino-uno", "id": "uno", "top": 0, "left": 0, "attrs": {}},
+    {"type": "wokwi-dht22", "id": "dht", "top": -30, "left": 360, "attrs": {"temperature": "24", "humidity": "50"}},
+    {"type": "wokwi-resistor", "id": "r1", "top": 150, "left": 365, "attrs": {"value": "10000"}}
+  ],
+  "connections": [
+    ["uno:5V", "dht:VCC", "red", ["v30", "h100"]],
+    ["uno:GND.1", "dht:GND", "black", ["v60", "h190"]],
+    ["uno:2", "dht:SDA", "green", ["v-50", "h150"]],
+    ["r1:1", "dht:VCC", "red", []],
+    ["r1:2", "dht:SDA", "green", []]
+  ],
+  "serialMonitor": {"display": "always", "newline": "lf", "convertEol": false}
+}
