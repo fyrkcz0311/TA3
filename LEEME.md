@@ -124,6 +124,22 @@ python simulador_temperatura.py
 
 Publica una temperatura cercana a 24 °C cada 10 segundos en el mismo tópico y con el mismo formato que el puente. Opciones útiles: `--intervalo`, `--base`, `--cantidad 6` (para una prueba corta) y `--mqtt-puerto`. Son valores de prueba, no mediciones: no lo ejecutes al mismo tiempo que el puente, porque ambos escriben en el mismo tópico.
 
+### Probar el puente sin Arduino: Uno virtual
+
+`arduino_virtual.py` crea un puerto serial virtual que escribe lo mismo que el firmware (una lectura cada 10 segundos y, cada 6, un `ERR_DHT`). Así se prueba `puente_mqtt.py` tal como se usaría con la placa. En una Terminal:
+
+```sh
+python arduino_virtual.py
+```
+
+Muestra un puerto como `/dev/ttys001`. En otra Terminal, con el entorno activado:
+
+```sh
+python puente_mqtt.py --puerto /dev/ttys001
+```
+
+Usa el puerto que aparezca en tu pantalla. Detén primero el puente y después el Uno virtual con **Control + C**.
+
 ## 5. Simular el circuito
 
 ### Prueba sencilla en el navegador
