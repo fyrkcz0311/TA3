@@ -1,6 +1,7 @@
 """Lee distancias del Uno por USB, o de Wokwi por RFC2217, y publica en MQTT."""
 import argparse
 import math
+import re
 import sys
 import threading
 import time
@@ -9,12 +10,21 @@ import paho.mqtt.client as mqtt
 import serial
 
 
+DISTANCIA_MIN_CM = 2.0
+DISTANCIA_MAX_CM = 400.0
+# Acepta "42.37" y tambien "Distancia: 42.37 cm".
+LINEA = re.compile(r"(?:Distancia:\s*)?(-?\d+(?:\.\d+)?)(?:\s*cm)?", re.IGNORECASE)
+
+
 def distancia_valida(linea):
-    try:
-        valor = float(linea)
-    except ValueError:
+    encontrado = LINEA.fullmatch(linea)
+    if not encontrado:
         return None
-    return valor if math.isfinite(valor) else None
+    valor = float(encontrado.group(1))
+    # Sin eco, pulseIn devuelve 0 y el sketch imprime 0.00: no es una medicion.
+    if not math.isfinite(valor) or not DISTANCIA_MIN_CM <= valor <= DISTANCIA_MAX_CM:
+        return None
+    return valor
 
 
 def main():

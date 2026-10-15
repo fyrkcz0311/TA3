@@ -18,7 +18,7 @@ No hacen falta resistencias. Desconecta el USB mientras colocas los cables y sig
 | --- | --- |
 | VCC | 5V |
 | Trig | Pin digital 9 (D9) |
-| Echo | Pin digital 10 (D10) |
+| Echo | Pin digital 8 (D8) |
 | GND | GND |
 
 El HC-SR04 funciona a 5 V y su pin Echo entrega 5 V, que el Uno acepta directamente. (En placas de 3,3 V haría falta un divisor de tensión en Echo; no es el caso del Uno.)
@@ -31,9 +31,9 @@ Coloca el sensor con los dos "ojos" mirando hacia una superficie plana y dura. M
 2. Abre `arduino/distancia_hcsr04/distancia_hcsr04.ino`. No necesita bibliotecas adicionales.
 3. Conecta el Uno por USB. En Herramientas elige **Arduino Uno** y el puerto de la placa.
 4. Sube el programa y abre el Monitor Serie a **9600 baudios**.
-5. Espera 10 segundos. Debe aparecer un número como `42.37`, y luego una lectura cada 10 segundos. Acerca y aleja la mano del sensor: el valor debe cambiar.
+5. Debe aparecer un número como `42.37` cada segundo. Acerca y aleja la mano del sensor: el valor debe cambiar.
 
-El programa está configurado para **Trig en D9** y **Echo en D10**. Aparece `ERR_HCSR04` cuando no vuelve eco o la distancia queda fuera de 2 a 400 cm: revisa el cableado o apunta el sensor a una superficie más cercana. Para medir más seguido, cambia `INTERVALO_MS` en el programa.
+El programa está configurado para **Trig en D9** y **Echo en D8**. Aparece `ERR_HCSR04` cuando no vuelve eco o la distancia queda fuera de 2 a 400 cm: revisa el cableado o apunta el sensor a una superficie más cercana. Para medir más seguido, cambia `INTERVALO_MS` en el programa.
 
 **Cierra el Monitor Serie antes de ejecutar Python:** el monitor y el puente no deben ocupar el mismo puerto simultaneamente. Tambien cierralo antes de volver a cargar un programa.
 
@@ -200,7 +200,7 @@ En la prueba de compilación local de este Mac apareció `Bad CPU type in execut
 
 | Problema | Acción |
 | --- | --- |
-| `ERR_HCSR04` | Revisa VCC, GND, Trig en D9 y Echo en D10. Apunta a una superficie dura entre 2 y 400 cm. Desconecta USB antes de cambiar cables. |
+| `ERR_HCSR04` | Revisa VCC, GND, Trig en D9 y Echo en D8. Apunta a una superficie dura entre 2 y 400 cm. Desconecta USB antes de cambiar cables. |
 | No aparece el puerto | Comprueba el cable USB de datos, adaptador y selección del puerto en Arduino IDE. |
 | Puerto ocupado | Cierra Monitor Serie, Serial Plotter y cualquier otro programa que use el Uno. |
 | Docker no responde | Abre Docker Desktop y espera a que termine de iniciar. |

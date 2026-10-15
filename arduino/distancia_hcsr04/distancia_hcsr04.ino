@@ -1,7 +1,7 @@
-// Placa fisica: Arduino Uno + HC-SR04. TRIG en D9 y ECHO en D10. No requiere bibliotecas.
+// Placa fisica: Arduino Uno + HC-SR04. TRIG en D9 y ECHO en D8. No requiere bibliotecas.
 const uint8_t PIN_TRIG = 9;
-const uint8_t PIN_ECHO = 10;
-const unsigned long INTERVALO_MS = 10000UL;
+const uint8_t PIN_ECHO = 8;
+const unsigned long INTERVALO_MS = 1000UL;
 // Eco maximo esperado: unos 4 m de ida y vuelta (~23 ms). Si tarda mas, no hubo eco.
 const unsigned long ESPERA_ECO_US = 30000UL;
 const float DISTANCIA_MIN_CM = 2.0;
