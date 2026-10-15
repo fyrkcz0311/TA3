@@ -20,7 +20,7 @@ services:
       DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUX_USER:-admin}
       DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUX_PASSWORD:?Ejecuta python3 preparar.py}
       DOCKER_INFLUXDB_INIT_ORG: ta3
-      DOCKER_INFLUXDB_INIT_BUCKET: temperatura
+      DOCKER_INFLUXDB_INIT_BUCKET: distancia
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_TOKEN:?Ejecuta python3 preparar.py}
     ports:
       - "127.0.0.1:${INFLUX_HOST_PORT:-8086}:8086"

@@ -10,7 +10,7 @@ datasources:
     jsonData:
       version: Flux
       organization: ta3
-      defaultBucket: temperatura
+      defaultBucket: distancia
       httpMode: POST
     secureJsonData:
       token: $INFLUX_TOKEN

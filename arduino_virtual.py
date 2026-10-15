@@ -1,4 +1,4 @@
-"""Imita al Uno con DHT11: crea un puerto serial virtual y escribe lo mismo que el firmware.
+"""Imita al Uno con HC-SR04: crea un puerto serial virtual y escribe lo mismo que el firmware.
 
 Sirve para probar puente_mqtt.py sin placa. Usa un pseudo-terminal de macOS/Linux;
 el puente lo abre igual que /dev/cu.usbmodem...
@@ -13,9 +13,9 @@ import tty
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--intervalo", type=float, default=10.0, help="segundos entre lecturas")
-    parser.add_argument("--base", type=float, default=23.0, help="temperatura media en C")
+    parser.add_argument("--base", type=float, default=100.0, help="distancia media en cm")
     parser.add_argument("--error-cada", type=int, default=6,
-                        help="emite ERR_DHT cada N lecturas; 0 = nunca")
+                        help="emite ERR_HCSR04 cada N lecturas; 0 = nunca")
     args = parser.parse_args()
     if args.intervalo <= 0:
         parser.error("--intervalo debe ser mayor que 0")
@@ -33,11 +33,12 @@ def main():
             time.sleep(args.intervalo)
             lecturas += 1
             if args.error_cada and lecturas % args.error_cada == 0:
-                linea = "ERR_DHT"
+                linea = "ERR_HCSR04"
             else:
-                valor += random.uniform(-0.3, 0.3) + (args.base - valor) * 0.1
-                # El DHT11 entrega pasos de 0.1 C; el firmware imprime dos decimales.
-                linea = f"{round(valor, 1):.2f}"
+                valor += random.uniform(-3.0, 3.0) + (args.base - valor) * 0.1
+                valor = min(max(valor, 2.0), 400.0)
+                # El firmware imprime centimetros con dos decimales, dentro del rango del sensor.
+                linea = f"{valor:.2f}"
             os.write(maestro, (linea + "\r\n").encode("ascii"))
             print(f"{time.strftime('%H:%M:%S')} Serial -> {linea}", flush=True)
     except KeyboardInterrupt:

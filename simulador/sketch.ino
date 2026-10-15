@@ -1,14 +1,17 @@
-#include <DHT.h>
-
-// Simulacion: Wokwi ofrece DHT22. La placa fisica usa DHT11.
-const uint8_t PIN_SENSOR = 2;
+// Simulacion: mismo programa que la placa fisica (HC-SR04, TRIG en D9 y ECHO en D10).
+const uint8_t PIN_TRIG = 9;
+const uint8_t PIN_ECHO = 10;
 const unsigned long INTERVALO_MS = 10000UL;
-DHT sensor(PIN_SENSOR, DHT22);
+const unsigned long ESPERA_ECO_US = 30000UL;
+const float DISTANCIA_MIN_CM = 2.0;
+const float DISTANCIA_MAX_CM = 400.0;
 unsigned long ultimaLectura = 0;
 
 void setup() {
   Serial.begin(9600);
-  sensor.begin();
+  pinMode(PIN_TRIG, OUTPUT);
+  pinMode(PIN_ECHO, INPUT);
+  digitalWrite(PIN_TRIG, LOW);
 }
 
 void loop() {
@@ -16,10 +19,17 @@ void loop() {
   if (ahora - ultimaLectura < INTERVALO_MS) return;
   ultimaLectura = ahora;
 
-  const float temperatura = sensor.readTemperature();
-  if (isnan(temperatura)) {
-    Serial.println("ERR_DHT");
+  digitalWrite(PIN_TRIG, LOW);
+  delayMicroseconds(2);
+  digitalWrite(PIN_TRIG, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(PIN_TRIG, LOW);
+
+  const unsigned long duracion = pulseIn(PIN_ECHO, HIGH, ESPERA_ECO_US);
+  const float distancia = duracion * 0.0343 / 2.0;
+  if (duracion == 0 || distancia < DISTANCIA_MIN_CM || distancia > DISTANCIA_MAX_CM) {
+    Serial.println("ERR_HCSR04");
     return;
   }
-  Serial.println(temperatura, 2);
+  Serial.println(distancia, 2);
 }

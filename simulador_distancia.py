@@ -1,4 +1,4 @@
-"""Publica temperaturas simuladas en MQTT, sin Arduino, para probar el recorrido completo."""
+"""Publica distancias simuladas en MQTT, sin Arduino, para probar el recorrido completo."""
 import argparse
 import random
 import sys
@@ -8,20 +8,20 @@ import time
 import paho.mqtt.client as mqtt
 
 
-def siguiente_temperatura(actual, base, variacion):
-    # Paseo aleatorio que tiende a volver a la base, con limites razonables para un interior.
+def siguiente_distancia(actual, base, variacion):
+    # Paseo aleatorio que tiende a volver a la base, dentro del rango del HC-SR04 (2 a 400 cm).
     paso = random.uniform(-variacion, variacion) + (base - actual) * 0.1
-    return min(max(actual + paso, 10.0), 40.0)
+    return min(max(actual + paso, 2.0), 400.0)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--broker", default="127.0.0.1")
     parser.add_argument("--mqtt-puerto", type=int, default=1883)
-    parser.add_argument("--topico", default="iot/raspberrypi/temperatura")
+    parser.add_argument("--topico", default="iot/raspberrypi/distancia")
     parser.add_argument("--intervalo", type=float, default=10.0, help="segundos entre lecturas")
-    parser.add_argument("--base", type=float, default=24.0, help="temperatura media en C")
-    parser.add_argument("--variacion", type=float, default=0.5, help="cambio maximo por lectura")
+    parser.add_argument("--base", type=float, default=100.0, help="distancia media en cm")
+    parser.add_argument("--variacion", type=float, default=3.0, help="cambio maximo por lectura en cm")
     parser.add_argument("--cantidad", type=int, default=0, help="lecturas a enviar; 0 = sin fin")
     args = parser.parse_args()
     if args.intervalo <= 0:
@@ -51,13 +51,13 @@ def main():
     try:
         if not conectado.wait(20):
             raise RuntimeError("EMQX no responde. Abre Docker Desktop y revisa docker compose ps.")
-        print(f"Simulando una temperatura cada {args.intervalo:g} s en {args.topico}. "
+        print(f"Simulando una distancia cada {args.intervalo:g} s en {args.topico}. "
               "Detener con Control + C.", flush=True)
         valor = args.base
         enviadas = 0
         proxima = time.monotonic()
         while args.cantidad == 0 or enviadas < args.cantidad:
-            valor = siguiente_temperatura(valor, args.base, args.variacion)
+            valor = siguiente_distancia(valor, args.base, args.variacion)
             if not conectado.is_set():
                 print(f"Sin MQTT; lectura simulada {valor:.2f} no enviada.", flush=True)
             else:
@@ -66,7 +66,7 @@ def main():
                     mensaje.wait_for_publish(timeout=5)
                     if mensaje.is_published():
                         hora = time.strftime("%H:%M:%S")
-                        print(f"{hora} EMQX confirmo: {valor:.2f} C (simulada) -> {args.topico}",
+                        print(f"{hora} EMQX confirmo: {valor:.2f} cm (simulada) -> {args.topico}",
                               flush=True)
                     else:
                         print("Sin confirmacion aun; MQTT puede reenviar al reconectar.", flush=True)

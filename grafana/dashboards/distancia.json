@@ -1,8 +1,8 @@
 {
   "id": null,
-  "uid": "ta3-temperatura-arduino",
-  "title": "TA3 | Arduino Uno | Temperatura",
-  "description": "Arduino Uno por USB. Placa fisica: DHT11. Simulador: DHT22.",
+  "uid": "ta3-distancia-arduino",
+  "title": "TA3 | Arduino Uno | Distancia",
+  "description": "Arduino Uno por USB. Sensor ultrasonico HC-SR04 (fisico y simulador).",
   "tags": [
     "TA3",
     "Arduino"
@@ -32,7 +32,7 @@
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "celsius",
+          "unit": "suffix: cm",
           "decimals": 2,
           "color": {
             "mode": "fixed",
@@ -60,7 +60,7 @@
             "type": "influxdb",
             "uid": "ta3-influx"
           },
-          "query": "from(bucket: \"temperatura\")\n  |> range(start: -1m, stop: now())\n  |> filter(fn: (r) => r._measurement == \"temperatura\" and r._field == \"value\")\n  |> filter(fn: (r) => r.topic == \"iot/raspberrypi/temperatura\")\n  |> group()\n  |> last()"
+          "query": "from(bucket: \"distancia\")\n  |> range(start: -1m, stop: now())\n  |> filter(fn: (r) => r._measurement == \"distancia\" and r._field == \"value\")\n  |> filter(fn: (r) => r.topic == \"iot/raspberrypi/distancia\")\n  |> group()\n  |> last()"
         }
       ]
     },
@@ -80,7 +80,7 @@
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "celsius",
+          "unit": "suffix: cm",
           "decimals": 2,
           "color": {
             "mode": "fixed",
@@ -108,7 +108,7 @@
             "type": "influxdb",
             "uid": "ta3-influx"
           },
-          "query": "from(bucket: \"temperatura\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"temperatura\" and r._field == \"value\")\n  |> filter(fn: (r) => r.topic == \"iot/raspberrypi/temperatura\")\n  |> group()\n  |> mean()"
+          "query": "from(bucket: \"distancia\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"distancia\" and r._field == \"value\")\n  |> filter(fn: (r) => r.topic == \"iot/raspberrypi/distancia\")\n  |> group()\n  |> mean()"
         }
       ]
     },
@@ -128,7 +128,7 @@
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "celsius",
+          "unit": "suffix: cm",
           "decimals": 2,
           "color": {
             "mode": "fixed",
@@ -156,7 +156,7 @@
             "type": "influxdb",
             "uid": "ta3-influx"
           },
-          "query": "from(bucket: \"temperatura\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"temperatura\" and r._field == \"value\")\n  |> filter(fn: (r) => r.topic == \"iot/raspberrypi/temperatura\")\n  |> group()\n  |> min()"
+          "query": "from(bucket: \"distancia\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"distancia\" and r._field == \"value\")\n  |> filter(fn: (r) => r.topic == \"iot/raspberrypi/distancia\")\n  |> group()\n  |> min()"
         }
       ]
     },
@@ -176,7 +176,7 @@
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "celsius",
+          "unit": "suffix: cm",
           "decimals": 2,
           "color": {
             "mode": "fixed",
@@ -204,14 +204,14 @@
             "type": "influxdb",
             "uid": "ta3-influx"
           },
-          "query": "from(bucket: \"temperatura\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"temperatura\" and r._field == \"value\")\n  |> filter(fn: (r) => r.topic == \"iot/raspberrypi/temperatura\")\n  |> group()\n  |> max()"
+          "query": "from(bucket: \"distancia\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"distancia\" and r._field == \"value\")\n  |> filter(fn: (r) => r.topic == \"iot/raspberrypi/distancia\")\n  |> group()\n  |> max()"
         }
       ]
     },
     {
       "id": 5,
       "type": "timeseries",
-      "title": "Temperatura en el tiempo",
+      "title": "Distancia en el tiempo",
       "datasource": {
         "type": "influxdb",
         "uid": "ta3-influx"
@@ -224,7 +224,7 @@
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "celsius",
+          "unit": "suffix: cm",
           "decimals": 2,
           "custom": {
             "drawStyle": "line",
@@ -255,7 +255,7 @@
             "type": "influxdb",
             "uid": "ta3-influx"
           },
-          "query": "from(bucket: \"temperatura\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"temperatura\" and r._field == \"value\")\n  |> filter(fn: (r) => r.topic == \"iot/raspberrypi/temperatura\")\n  |> group()\n  |> sort(columns: [\"_time\"])"
+          "query": "from(bucket: \"distancia\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"distancia\" and r._field == \"value\")\n  |> filter(fn: (r) => r.topic == \"iot/raspberrypi/distancia\")\n  |> group()\n  |> sort(columns: [\"_time\"])"
         }
       ]
     }

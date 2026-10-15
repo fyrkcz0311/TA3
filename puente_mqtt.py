@@ -1,4 +1,4 @@
-"""Lee temperaturas del Uno por USB, o de Wokwi por RFC2217, y publica en MQTT."""
+"""Lee distancias del Uno por USB, o de Wokwi por RFC2217, y publica en MQTT."""
 import argparse
 import math
 import sys
@@ -9,7 +9,7 @@ import paho.mqtt.client as mqtt
 import serial
 
 
-def temperatura_valida(linea):
+def distancia_valida(linea):
     try:
         valor = float(linea)
     except ValueError:
@@ -23,7 +23,7 @@ def main():
                         help="/dev/cu.usbmodem... o rfc2217://localhost:4000")
     parser.add_argument("--broker", default="127.0.0.1")
     parser.add_argument("--mqtt-puerto", type=int, default=1883)
-    parser.add_argument("--topico", default="iot/raspberrypi/temperatura")
+    parser.add_argument("--topico", default="iot/raspberrypi/distancia")
     args = parser.parse_args()
 
     conectado = threading.Event()
@@ -75,7 +75,7 @@ def main():
                     continue
                 linea = pendiente.decode("ascii", errors="replace").strip()
                 pendiente.clear()
-                valor = temperatura_valida(linea)
+                valor = distancia_valida(linea)
                 if valor is None:
                     print(f"Lectura ignorada: {linea!r}. Revisa sensor y cableado.", flush=True)
                     continue
@@ -87,7 +87,7 @@ def main():
                 try:
                     mensaje.wait_for_publish(timeout=5)
                     if mensaje.is_published():
-                        print(f"EMQX confirmo: {valor:.2f} C -> {args.topico}", flush=True)
+                        print(f"EMQX confirmo: {valor:.2f} cm -> {args.topico}", flush=True)
                     else:
                         print("Sin confirmacion aun; MQTT puede reenviar al reconectar.", flush=True)
                 except (RuntimeError, ValueError) as error:

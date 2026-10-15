@@ -4,15 +4,13 @@
   "editor": "wokwi",
   "parts": [
     {"type": "wokwi-arduino-uno", "id": "uno", "top": 0, "left": 0, "attrs": {}},
-    {"type": "wokwi-dht22", "id": "dht", "top": -30, "left": 360, "attrs": {"temperature": "24", "humidity": "50"}},
-    {"type": "wokwi-resistor", "id": "r1", "top": 150, "left": 365, "attrs": {"value": "10000"}}
+    {"type": "wokwi-hc-sr04", "id": "ultrasonic", "top": -110, "left": 330, "attrs": {"distance": "100"}}
   ],
   "connections": [
-    ["uno:5V", "dht:VCC", "red", ["v30", "h100"]],
-    ["uno:GND.1", "dht:GND", "black", ["v60", "h190"]],
-    ["uno:2", "dht:SDA", "green", ["v-50", "h150"]],
-    ["r1:1", "dht:VCC", "red", []],
-    ["r1:2", "dht:SDA", "green", []]
+    ["uno:5V", "ultrasonic:VCC", "red", ["v30", "h100"]],
+    ["uno:GND.1", "ultrasonic:GND", "black", ["v60", "h190"]],
+    ["uno:9", "ultrasonic:TRIG", "orange", ["v-30", "h150"]],
+    ["uno:10", "ultrasonic:ECHO", "green", ["v-40", "h160"]]
   ],
   "serialMonitor": {"display": "always", "newline": "lf", "convertEol": false}
 }
